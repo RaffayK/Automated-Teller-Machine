@@ -1,11 +1,10 @@
 from datetime import date
 import threading
 import time
-import random
-from datetime import datetime, timedelta
 
 today = date.today()
 lock = threading.Lock()
+
 
 class CardHolder:
     def __init__(self, cardNumber, pin, firstName, lastName, balance):
@@ -55,11 +54,12 @@ class CardHolder:
         print("Last Name: ", self.lastName)
         print("Balance: ", self.balance)
 
+
 # Function for printing the menu
 def print_menu():
-    print(" ********* ")
-    print(" *THE RFM BANK MENU* ")
-    print(" ********* ")
+    print("        *********           ")
+    print("    *THE RFM BANK MENU*     ")
+    print("        *********           ")
     print("* Please choose one of the following options:")
     print("****************")
     print("* 1. Deposit ")
@@ -73,29 +73,32 @@ def print_menu():
     print("* 9. Exit")
     print("****************")
 
+
 def deposit(cardHolder):
     try:
-        print(" *********")
+        print("        *********")
         deposit = float(input("* Enter the amount you want to deposit (in Rps): "))
         cardHolder.set_balance(cardHolder.get_balance() + deposit)
         print("* Your new balance is:", cardHolder.get_balance())
         print("* Date:", today)
-        print(" *********")
+        print("        *********")
     except ValueError:
         print("* Invalid input. Amount must be a number.")
 
+
 def withdraw(cardHolder):
     try:
-        print(" *********")
+        print("        *********")
         withdraw = float(input("* Enter the amount you want to withdraw (in Rps): "))
         if cardHolder.get_balance() < withdraw:
             print("* Sorry, insufficient balance")
         else:
             cardHolder.set_balance(cardHolder.get_balance() - withdraw)
             print("* Successfully withdrawn")
-            print(" *********")
+        print("        *********")
     except ValueError:
         print("* Invalid input. Amount must be a number.")
+
 
 def Funds_Transfer(cardHolder):
     recipient_name = input("* Enter the name or phone number of the recipient: ")
@@ -105,52 +108,67 @@ def Funds_Transfer(cardHolder):
             print("* Sorry, insufficient balance")
         else:
             cardHolder.set_balance(cardHolder.get_balance() - withdraw)
-            print(" *********")
+            print("        *********")
             print("* Name:", recipient_name)
             print("* Amount sent:", withdraw)
             print("* Status: Successfully sent")
             print("* Date:", today)
             print("* Amount remaining:", cardHolder.get_balance())
-            print(" *********")
+            print("        *********")
     except ValueError:
         print("* Invalid input. Amount must be a number.")
 
+
 def Balance_Inquiry(cardHolder):
-    print(" *********")
+    print("        *********")
     print("* Name:", cardHolder.get_firstName(), cardHolder.get_lastName())
     print("* Your current balance in the account is:", cardHolder.get_balance())
     print("* Date:", today)
-    print(" *********")
+    print("        *********")
+
+
+import random
+from datetime import datetime, timedelta
+
+today = datetime.today().date()
+
+# Rest of the code...
 
 def mini_statement(cardHolder, today):
-    print(" *********")
+    print("        *********")
     print("* Name:", cardHolder.get_firstName(), cardHolder.get_lastName())
     print("* Mini Statement:")
     # Generate random dates for transactions
     transaction_dates = [today - timedelta(days=random.randint(1, 30)) for _ in range(5)]
+
     for i in range(5):
         transaction_amount = random.randint(10, 1000)
         transaction_type = random.choice(["Deposit", "Withdraw"])
         transaction_date = transaction_dates[i]
+
         print("* Transaction {}: {} ${} on {}".format(i + 1, transaction_type, transaction_amount, transaction_date))
-    print(" *********")
+
+    print("        *********")
+
 
 def account_Details(cardHolder):
-    print(" *********")
+    print("        *********")
     print("* Debit Card No:", cardHolder.get_cardNumber())
     print("* Name:", cardHolder.get_firstName(), cardHolder.get_lastName())
     print("* Total Amount:", cardHolder.get_balance())
     print("* Date:", today)
-    print(" *********")
+    print("        *********")
+
 
 def change_pin(cardHolder):
     new_pin = input("* Enter your new PIN: ")
     cardHolder.set_pin(new_pin)
     print("* PIN successfully changed!")
 
+
 def pay_bill(cardHolder):
     try:
-        print(" *********")
+        print("        *********")
         bill_amount = float(input("* Enter the bill amount to pay (in Rps): "))
         if cardHolder.get_balance() < bill_amount:
             print("* Sorry, insufficient balance")
@@ -160,9 +178,10 @@ def pay_bill(cardHolder):
             print("* Bill amount:", bill_amount)
             print("* Date:", today)
             print("* Amount remaining:", cardHolder.get_balance())
-            print(" *********")
+        print("        *********")
     except ValueError:
         print("* Invalid input. Amount must be a number.")
+
 
 if __name__ == "__main__":
     current_user = None
@@ -173,9 +192,10 @@ if __name__ == "__main__":
         CardHolder("3452145129", 3971, "Muhammad", "Ali", 1200)
     ]
 
-    print(" ********* ")
+    print("       *********           ")
     print("* Welcome to THE RFM BANK!!")
-    print(" ********* ")
+    print("       *********           ")
+
     print("* Please insert your card...")
     time.sleep(2)
     print("Please wait while your card is being processed!")
@@ -189,7 +209,7 @@ if __name__ == "__main__":
             if cardHolder.get_cardNumber() == card_number and cardHolder.get_pin() == pin:
                 current_user = cardHolder
                 break
-        
+
         if current_user is None:
             print("* Card number or PIN not recognized. Please try again.")
         else:
@@ -202,3 +222,26 @@ if __name__ == "__main__":
         print_menu()
         option = input("* Enter your choice (1-9): ")
 
+        if option == "1":
+            deposit(current_user)
+        elif option == "2":
+            withdraw(current_user)
+        elif option == "3":
+            Funds_Transfer(current_user)
+        elif option == "4":
+            Balance_Inquiry(current_user)
+        elif option == "5":
+            mini_statement(current_user, today)
+        elif option == "6":
+            account_Details(current_user)
+        elif option == "7":
+            change_pin(current_user)
+        elif option == "8":
+            pay_bill(current_user)
+        elif option == "9":
+            print("        *********")
+            print(" *Thank you for using THE RFM BANK!")
+            print("        *********")
+            break
+        else:
+            print("* Invalid option. Please choose a valid option (1-9).")
